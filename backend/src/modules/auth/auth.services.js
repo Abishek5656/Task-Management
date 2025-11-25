@@ -16,6 +16,8 @@ export const authService = {
     // hash password
     const passwordHash = await hashPassword(password);
 
+    let managerUnique = role === 2 
+  ? Math.floor(1000 + Math.random() * 9000) : 0
     // insert user
     const result = await db
       .insert(users)
@@ -24,19 +26,11 @@ export const authService = {
         email,
         passwordHash,
         role,
-        managerId: managerId || null,
+        managerId: managerUnique,
       })
       .returning();
 
     const user = result[0];
-
-
-    // res.cookie("token", token, {
-    //   httpOnly: true,    
-    //   secure: true,     
-    //   sameSite: "strict",
-    //   maxAge: 24 * 60 * 60 * 1000, // 1 day
-    // });
 
     // generate token
     const token = generateToken({

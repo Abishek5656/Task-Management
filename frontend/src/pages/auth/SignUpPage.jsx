@@ -838,8 +838,8 @@ export default function SignUpPage() {
                           }))
                         }
                       >
-                        <FormControlLabel value={0} control={<Radio />} label="Employee" />
-                        <FormControlLabel value={1} control={<Radio />} label="Manager" />
+                        <FormControlLabel value={1} control={<Radio />} label="Employee" />
+                        <FormControlLabel value={2} control={<Radio />} label="Manager" />
                       </RadioGroup>
                     </FormControl>
                   </Grid>

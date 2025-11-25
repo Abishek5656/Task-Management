@@ -3,6 +3,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { signupApi, signinApi } from "../../api/authApi";
 
+
+// 👉 Export initial state so you can import anywhere
+export const authInitialState = {
+  loading: false,
+  error: null,
+  user: JSON.parse(localStorage.getItem("user")) || null,
+  token: localStorage.getItem("token") || null,
+};
+
 export const signupUser = createAsyncThunk(
   "auth/signupUser",
   async (formData, { rejectWithValue }) => {
@@ -36,12 +45,7 @@ export const signinUser = createAsyncThunk(
 
 const authSlice = createSlice({
   name: "auth",
-  initialState: {
-    loading: false,
-    error: null,
-    user: JSON.parse(localStorage.getItem("user")) || null,
-    token: localStorage.getItem("token") || null
-  },
+  initialState: authInitialState,
   reducers: {},
   extraReducers: (builder) => {
     builder

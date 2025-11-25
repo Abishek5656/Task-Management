@@ -9,13 +9,11 @@ app.use(express.json());
 app.use(cookieParser());
 
 import authRoutes from "./modules/auth/auth.routes.js";
+import requestRoutes from "./modules/requests/request.routes.js";
 
-// TEMP root route
-app.get("/", (req, res) => {
-  res.send({ message: "Backend running successfully!" });
-});
 
 // Mount routes later here:
 app.use("/auth", authRoutes);
+app.use("/requests", requestRoutes);
 
 export { app };

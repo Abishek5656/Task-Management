@@ -6,7 +6,7 @@ import { generateToken } from "../../utils/jwt.js";
 
 export const authService = {
   // ---------------- SIGN UP ---------------------
-  async signup({ name, email, password, role, managerId }) {
+  async signup({ fullName, email, password, role, managerId }) {
     // check if email exists
     const exists = await db.select().from(users).where(eq(users.email, email));
     if (exists.length > 0) {
@@ -20,7 +20,7 @@ export const authService = {
     const result = await db
       .insert(users)
       .values({
-        name,
+        name: fullName,
         email,
         passwordHash,
         role,
@@ -29,6 +29,14 @@ export const authService = {
       .returning();
 
     const user = result[0];
+
+
+    // res.cookie("token", token, {
+    //   httpOnly: true,    
+    //   secure: true,     
+    //   sameSite: "strict",
+    //   maxAge: 24 * 60 * 60 * 1000, // 1 day
+    // });
 
     // generate token
     const token = generateToken({

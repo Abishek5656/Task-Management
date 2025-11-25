@@ -8,6 +8,13 @@
       "when": 1764007067044,
       "tag": "0000_cooing_ego",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1764093969849,
+      "tag": "0001_first_slapstick",
+      "breakpoints": true
     }
   ]
 }

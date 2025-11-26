@@ -2,7 +2,7 @@ import { db } from "../../config/db.js";
 import { requests } from "../../db/schema/requests.js";
 import { users } from "../../db/schema/users.js";
 import { eq } from "drizzle-orm";
-
+import { alias } from "drizzle-orm/pg-core";
 
 
 export const requestService = {
@@ -41,32 +41,50 @@ export const requestService = {
     },
 
     // --------------------- GET MY CREATED REQUESTS -------------------------
- async getMyRequests(userId) {
+    async getMyRequests(userId) {
 
-    const data = await db
+
+    const creator = alias(users, "creator");
+    const assignee = alias(users, "assignee");
+    const manager = alias(users, "manager");
+
+     const data = await db
       .select({
         id: requests.id,
         title: requests.title,
         description: requests.description,
+
         createdById: requests.createdBy,
-        createdByName: users.name,         // creator name
+        createdByName: creator.name,
+
         assignedToId: requests.assignedTo,
-        assignedToName: assignedUser.name, // assigned employee name
+        assignedToName: assignee.name,
+
         managerId: manager.id,
-        managerName: manager.name,
+        //managerName: manager.name,
+
         status: requests.status,
         managerStatus: requests.managerStatus,
         managerComment: requests.managerComment,
         createdAt: requests.createdAt,
       })
       .from(requests)
-      .leftJoin(users, eq(requests.createdBy, users.id))        // createdBy → users
-      .leftJoin(users.as("assignedUser"), eq(requests.createdBy, assignedUser.id)) // assignedTo → users
-      .leftJoin(users.as("manager"), eq(assignedUser.managerId, requests.assignedTo)) // manager of assigned user
-      .where(eq(requests.createdBy, userId)); // or use managerId depending on role
 
+      // JOIN 1 → createdBy → creator
+      .leftJoin(creator, eq(requests.createdBy, creator.id))
+
+      // JOIN 2 → assignedTo → assignee
+      .leftJoin(assignee, eq(requests.assignedTo, assignee.managerId))
+
+      // JOIN 3 → assignee.managerId → manager.id
+      .leftJoin(manager, eq(assignee.managerId, manager.managerId))
+
+      .where(eq(requests.createdBy, userId));
+
+
+      console.log("data",data)
     return data;
-  }
+    }
 
 
 }

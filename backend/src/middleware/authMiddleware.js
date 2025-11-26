@@ -18,11 +18,11 @@ export const authMiddleware = (req, res, next) => {
     req.user = {
       id: decoded.id,
       email: decoded.email,
-      role: decoded.role
+      role: decoded.role,
+      manager: decoded.managerid
     };
 
-
-    console.log("reqqq", req.user)
+    console.log("req", req.user)
 
     next();
   } catch (err) {

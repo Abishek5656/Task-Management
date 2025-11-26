@@ -37,6 +37,7 @@ export const authService = {
       id: user.id,
       email: user.email,
       role: user.role,
+      managerid: user.managerId
     });
 
     return { user, token };

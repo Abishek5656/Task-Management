@@ -6,6 +6,8 @@ function App() {
   const Login = lazy(() => import("./pages/auth/SignInPage.jsx"));
   const EmployeeDashboard = lazy(() => import("./pages/employee/EmployeeDashboard.jsx"));
   const CreateRequestPage = lazy(() => import("./pages/employee/CreateRequestPage.jsx"));
+  const ManagerDashboard = lazy(() => import("./pages/manager/ManagerDashboard.jsx"));
+  const RequestDetailsPage = lazy(() => import("./pages/shared/RequestDetailsPage.jsx"));
 
 
 
@@ -26,8 +28,12 @@ function App() {
           {/* ---------- PROTECTED ROUTES ---------- */}
           <Route path="/dashboard" element={<EmployeeDashboard />} />
 
-          <Route path="/create-request" element={ <CreateRequestPage />}
-          />
+          <Route path="/create-request" element={<CreateRequestPage />} />
+
+
+          {/* Manager */}
+          <Route path="/manager" element={<ManagerDashboard />} />
+          <Route path="/request/:id" element={<RequestDetailsPage />} />
         </Routes>
       </BrowserRouter>
     </Suspense>

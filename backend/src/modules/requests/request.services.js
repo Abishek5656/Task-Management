@@ -41,12 +41,52 @@ export const requestService = {
     },
 
     // --------------------- GET MY CREATED REQUESTS -------------------------
+    // async getMyRequests(userId) {
+
+
+    //     const creator = alias(users, "creator");
+    //     const assignee = alias(users, "assignee");
+    //     const manager = alias(users, "manager");
+
+    //     const data = await db
+    //         .select({
+    //             id: requests.id,
+    //             title: requests.title,
+    //             description: requests.description,
+
+    //             createdById: requests.createdBy,
+    //             createdByName: creator.name,
+
+    //             assignedToId: requests.assignedTo,
+    //             assignedToName: assignee.name,
+
+    //             managerId: manager.id,
+    //             //managerName: manager.name,
+
+    //             status: requests.status,
+    //             managerStatus: requests.managerStatus,
+    //             managerComment: requests.managerComment,
+    //             createdAt: requests.createdAt,
+    //         })
+    //         .from(requests)
+
+    //         // JOIN 1 → createdBy → creator
+    //         .leftJoin(creator, eq(requests.createdBy, creator.id))
+
+    //         // JOIN 2 → assignedTo → assignee
+    //         .leftJoin(assignee, eq(requests.assignedTo, assignee.managerId))
+
+    //         // JOIN 3 → assignee.managerId → manager.id
+    //         .leftJoin(manager, eq(assignee.managerId, manager.managerId))
+
+    //         .where(eq(requests.createdBy, userId));
+
+
+    //     console.log("data", data)
+    //     return data;
+    // },
+
     async getMyRequests(userId) {
-
-
-        const creator = alias(users, "creator");
-        const assignee = alias(users, "assignee");
-        const manager = alias(users, "manager");
 
         const data = await db
             .select({
@@ -55,13 +95,10 @@ export const requestService = {
                 description: requests.description,
 
                 createdById: requests.createdBy,
-                createdByName: creator.name,
+                createdByName: sql`creator.name`,
 
                 assignedToId: requests.assignedTo,
-                assignedToName: assignee.name,
-
-                managerId: manager.id,
-                //managerName: manager.name,
+                assignedToName: sql`manager.name`,
 
                 status: requests.status,
                 managerStatus: requests.managerStatus,
@@ -71,21 +108,21 @@ export const requestService = {
             .from(requests)
 
             // JOIN 1 → createdBy → creator
-            .leftJoin(creator, eq(requests.createdBy, creator.id))
+            .leftJoin(
+                sql`users as creator`,
+                sql`creator.id = ${requests.createdBy}`
+            )
 
-            // JOIN 2 → assignedTo → assignee
-            .leftJoin(assignee, eq(requests.assignedTo, assignee.managerId))
-
-            // JOIN 3 → assignee.managerId → manager.id
-            .leftJoin(manager, eq(assignee.managerId, manager.managerId))
+            // JOIN 2 → assignedTo → manager
+            .leftJoin(
+                sql`users as manager`,
+                sql`manager.manager_id = ${requests.assignedTo}`
+            )
 
             .where(eq(requests.createdBy, userId));
 
-
-        console.log("data", data)
         return data;
     },
-
 
     // ----  
 

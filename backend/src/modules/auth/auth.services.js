@@ -64,4 +64,14 @@ export const authService = {
 
     return { user, token };
   },
+
+
+  async getAllManagers() {
+    const managers =  await db
+        .select()
+        .from(users)
+        .where(eq(users.role, 2)); 
+
+      return managers
+}
 };

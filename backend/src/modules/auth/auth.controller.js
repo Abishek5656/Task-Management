@@ -40,4 +40,22 @@ export const authController = {
       res.status(400).json({ error: err.message });
     }
   },
+
+  async getAllManagers(req, res) {
+       try {
+      const { email, password } = req.body;
+      const response = await authService.getAllManagers();
+
+      res.status(200).json({
+        message: "managers list",
+        // user: response.user,
+        // token: response.token
+        user:  response.user
+      });
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  }
+
+  
 };

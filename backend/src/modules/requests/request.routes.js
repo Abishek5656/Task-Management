@@ -10,6 +10,8 @@ router.use(authMiddleware);
 // create request
 router.post("/", requestController.create);
 
+//My Requests
+router.get("/my", requestController.myRequests);
 
 export default router;
 

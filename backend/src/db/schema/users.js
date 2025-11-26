@@ -8,7 +8,7 @@ export const users = pgTable("users", {
   passwordHash: text("password_hash").notNull(),
 
   role: integer("role").notNull(),      // 1 = EMPLOYEE, 2 = MANAGER
-  managerId: integer("manager_id"),     // FK → users.id (optional for employees)
+  managerId: integer("manager_id"),   
 
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });

@@ -1,8 +1,8 @@
 import { db } from "../../config/db.js";
 import { requests } from "../../db/schema/requests.js";
 import { users } from "../../db/schema/users.js";
-import { eq } from "drizzle-orm";
-import { alias } from "drizzle-orm/pg-core";
+import { sql, and, eq } from "drizzle-orm";
+
 
 
 export const requestService = {
@@ -89,12 +89,55 @@ export const requestService = {
 
     // ----  
 
+    // async getPendingApprovals(managerId) {
+    //     console.log("managerId",managerId)
+    //     return await db
+    //         .select()
+    //         .from(requests)
+    //         .where(
+    //             and(
+    //                 eq(requests.assignedTo, managerId),  
+    //                 eq(requests.managerStatus, 1)  
+    //             )
+    //         );
+    // },
+
+
     async getPendingApprovals(managerId) {
         return await db
-            .select()
+            .select({
+                id: requests.id,
+                title: requests.title,
+                description: requests.description,
+
+                createdBy: requests.createdBy,
+                createdByName: users.name,
+
+                assignedTo: requests.assignedTo,
+                managerName: sql`"managerUser"."name"`,
+
+                managerStatus: requests.managerStatus,
+                status: requests.status
+            })
             .from(requests)
-            .where(eq(requests.managerStatus, 1));
+
+            // First join: creator (normal users table)
+            .leftJoin(users, eq(users.id, requests.createdBy))
+
+            // Second join: manager (manually aliased)
+            .leftJoin(
+                sql`users as "managerUser"`,
+                sql`"managerUser"."manager_id" = ${requests.assignedTo}`
+            )
+
+            .where(
+                and(
+                    eq(requests.assignedTo, managerId),
+                    eq(requests.managerStatus, 1)
+                )
+            );
     },
+
 
     async getRequestById(id) {
         const data = await db

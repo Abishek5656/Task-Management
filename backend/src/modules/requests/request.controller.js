@@ -30,12 +30,14 @@ export const requestController = {
   async pendingApprovals(req, res) {
     try {
       const managerId = req.user.manager;
+      console.log("@",req.user)
       const list = await requestService.getPendingApprovals(managerId);
       res.status(201).json({ data: list });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
   },
+  
 
   async getById(req, res) {
     try {

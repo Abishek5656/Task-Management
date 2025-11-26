@@ -227,10 +227,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { createRequest
   // resetRequestState
 } from "../../store/request/requestSlice";
+import { useNavigate } from "react-router-dom"
 import { authInitialState } from "../../store/auth/authSlice";
 
 export default function CreateRequestPage() {
 
+  const navigate = useNavigate()
   
 
   const [form, setForm] = useState({
@@ -255,6 +257,7 @@ export default function CreateRequestPage() {
 
   const handleCreate = () => {
     dispatch(createRequest(form));
+    navigate("/dashboard")
   };
 
   // useEffect(() => {

@@ -1,12 +1,12 @@
 import axios from "axios";
-
-const API_URL = "http://localhost:5000/auth";
+import { BASE_URL } from "../config/index.js"
 
 export const signupApi = async (data) => {
-  return axios.post(`${API_URL}/signup`, data);
+  return axios.post(`${BASE_URL}/auth/signup`, data);
 };
 
 
 export const signinApi = async (data) => {
-  return axios.post(`${API_URL}/login`, data);
+  return axios.post(`${BASE_URL}/auth/login`, data);
 };
+

@@ -686,6 +686,9 @@ export default function SignUpPage() {
     { id: 1, name: "Priya R" },
     { id: 2, name: "Rahul S" },
     { id: 3, name: "Asha K" },
+
+    { name: "one",  id: 7216 },
+    { name: "one2", id: 8440 },
   ];
 
   const handleChange = (field) => (e) => {
@@ -845,7 +848,7 @@ export default function SignUpPage() {
                   </Grid>
 
                   {/* Manager Dropdown */}
-                  {values.role === 0 && (
+                  {values.role === 1 && (
                     <Grid item xs={12}>
                       <FormControl fullWidth>
                         <InputLabel id="manager">Manager (optional)</InputLabel>

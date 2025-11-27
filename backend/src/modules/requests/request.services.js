@@ -4,7 +4,6 @@ import { users } from "../../db/schema/users.js";
 import { sql, and, eq } from "drizzle-orm";
 
 
-
 export const requestService = {
 
     async createRequest(userId, { title, description, assignedTo }) {

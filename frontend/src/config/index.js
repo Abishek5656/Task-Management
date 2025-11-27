@@ -1,1 +1,1 @@
-export const BASE_URL = "http://localhost:5000"
+export const BASE_URL = "https://task-management-lq2z.onrender.com"

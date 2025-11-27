@@ -18,9 +18,9 @@ export default function ManagerDashboard() {
 
   const handleLogout = () => {
 
-    localStorage.removeItem("token")
-    localStorage.removeItem("user")
-    navigate("/singin")
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/signin", { replace: true });
   }
 
   return (

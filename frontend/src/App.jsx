@@ -1,8 +1,68 @@
+// import { lazy, Suspense } from "react";
+// import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
+// import RoleRedirect from "./pages/RoleRedirect.jsx";
+// import ProtectedRoute from "./pages/ProtectedRoute.jsx";
+
+// function App() {
+//   // Lazy-loaded pages
+//   const Signup = lazy(() => import("./pages/auth/SignUpPage.jsx"));
+//   const Login = lazy(() => import("./pages/auth/SignInPage.jsx"));
+//   const EmployeeDashboard = lazy(() => import("./pages/employee/EmployeeDashboard.jsx"));
+//   const CreateRequestPage = lazy(() => import("./pages/employee/CreateRequestPage.jsx"));
+//   const ManagerDashboard = lazy(() => import("./pages/manager/ManagerDashboard.jsx"));
+//   const RequestDetailsPage = lazy(() => import("./pages/shared/RequestDetailsPage.jsx"));
+
+//   return (
+//     <Suspense fallback={<div>Loading...</div>}>
+//       <BrowserRouter>
+//         <Routes>
+//           <Route path="/" element={<Navigate to="/signin" replace />}  />
+
+//           <Route path="/signin" element={<Login />} />
+//           <Route path="/signup" element={<Signup />} />
+
+//           <Route
+//             path="/dashboard"
+//             element={
+//               <ProtectedRoute allowedRoles={[1]}>
+//                 <EmployeeDashboard />
+//               </ProtectedRoute>
+//             }
+//           />
+
+//           <Route
+//             path="/manager"
+//             element={
+//               <ProtectedRoute allowedRoles={[2]}>
+//                 <ManagerDashboard />
+//               </ProtectedRoute>
+//             }
+//           />
+
+//           <Route
+//             path="/request/:id"
+//             element={
+//               <ProtectedRoute allowedRoles={[2]}>
+//                 <RequestDetailsPage />
+//               </ProtectedRoute>
+//             }
+//           />
+
+//           <Route path="*" element={<Navigate to="/signin" replace />} />
+//         </Routes>
+//       </BrowserRouter>
+//     </Suspense>
+//   );
+// }
+
+// export default App;
+
+
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-import RoleRedirect  from "./pages/RoleRedirect.jsx"
-import  ProtectedRoute  from "./pages/ProtectedRoute.jsx"
+import ProtectedRoute from "./pages/ProtectedRoute.jsx";
 
 function App() {
   const Signup = lazy(() => import("./pages/auth/SignUpPage.jsx"));
@@ -12,31 +72,18 @@ function App() {
   const ManagerDashboard = lazy(() => import("./pages/manager/ManagerDashboard.jsx"));
   const RequestDetailsPage = lazy(() => import("./pages/shared/RequestDetailsPage.jsx"));
 
-
-  const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user"));
-
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <BrowserRouter>
         <Routes>
 
-          {/* ROOT REDIRECT BASED ON USER ROLE */}
-          <Route path="/" element={<RoleRedirect />} />
+          {/* ❗ ROOT SHOULD NOT USE RoleRedirect — only go to signin */}
+          <Route path="/" element={<Navigate to="/signin" replace />} />
 
-          {/* SIGNUP */}
-          <Route
-            path="/signup"
-            element={!token ? <Signup /> : <RoleRedirect />}
-          />
+          <Route path="/signin" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
 
-          {/* SIGNIN */}
-          <Route
-            path="/signin"
-            element={!token ? <Login /> : <RoleRedirect />}
-          />
-
-          {/* EMPLOYEE ROUTES (role = 1) */}
+          {/* Employee */}
           <Route
             path="/dashboard"
             element={
@@ -46,6 +93,7 @@ function App() {
             }
           />
 
+          {/* Employee create request */}
           <Route
             path="/create-request"
             element={
@@ -55,7 +103,7 @@ function App() {
             }
           />
 
-          {/* MANAGER ROUTES (role = 2) */}
+          {/* Manager */}
           <Route
             path="/manager"
             element={
@@ -74,9 +122,8 @@ function App() {
             }
           />
 
-          {/* FALLBACK */}
-          <Route path="*" element={<Navigate to="/" />} />
-
+          {/* fallback */}
+          <Route path="*" element={<Navigate to="/signin" replace />} />
         </Routes>
       </BrowserRouter>
     </Suspense>

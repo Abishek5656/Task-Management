@@ -31,7 +31,7 @@ export default function Header() {
               onClick={() => {
                 localStorage.removeItem("token");
                 localStorage.removeItem("user");
-                navigate("/signin");
+                navigate("/signin", { replace: true });
               }}
             >
               Logout

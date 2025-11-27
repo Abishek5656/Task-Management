@@ -53,9 +53,14 @@ export default function SignInPage() {
   // Redirect after successful login
   useEffect(() => {
     if (user) {
-      navigate("/dashboard");
+      if (user.role === 1) {
+        navigate("/dashboard", { replace: true });
+      } else {
+        navigate("/manager", { replace: true });
+      }
     }
-  }, [user, navigate]);
+  }, [user]);
+
 
   return (
     <Grid

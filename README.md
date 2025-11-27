@@ -88,4 +88,7 @@ Frontend:
 - npm run build
 - npm run preview
 
+Postman collection:
+- https://documenter.getpostman.com/view/29785161/2sB3dLSr6T
+
 # ❤️ Created by Abishek

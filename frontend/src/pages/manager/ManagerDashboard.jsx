@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback  } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPendingRequests } from "../../store/pending/pendingSlice";
 import Button from "../../components/ui/Button";
 import { useNavigate } from "react-router-dom";
+
+import { logout } from "../../store/auth/authSlice";
 
 export default function ManagerDashboard() {
   const dispatch = useDispatch();
@@ -16,12 +18,10 @@ export default function ManagerDashboard() {
 
 
 
-  const handleLogout = () => {
-
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    navigate("/signin", { replace: true });
-  }
+  const handleLogout = useCallback(() => {
+    dispatch(logout());
+    navigate("/signin");
+  }, [dispatch, navigate]);
 
   return (
     <div style={{ padding: 20 }}>

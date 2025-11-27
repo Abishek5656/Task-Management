@@ -1,11 +1,23 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import { AppBar, Toolbar, Typography, Box, IconButton, Menu, MenuItem } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
+
+import { logout } from "../../store/auth/authSlice";
 
 export default function Header() {
 
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = useCallback(() => {
+    dispatch(logout());
+    navigate("/signin", { replace: true });
+  }, [dispatch, navigate]);
+
+
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleMenu = (event) => setAnchorEl(event.currentTarget);
@@ -27,13 +39,7 @@ export default function Header() {
           </IconButton>
           <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
             <MenuItem>Profile</MenuItem>
-            <MenuItem
-              onClick={() => {
-                localStorage.removeItem("token");
-                localStorage.removeItem("user");
-                navigate("/signin", { replace: true });
-              }}
-            >
+            <MenuItem onClick={handleLogout}>
               Logout
             </MenuItem>
           </Menu>

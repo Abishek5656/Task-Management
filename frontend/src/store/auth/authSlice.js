@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { signupApi, signinApi, managersApi } from "../../api/authApi";
 
 
-// 👉 Export initial state so you can import anywhere
+//Export initial state so you can import anywhere
 export const authInitialState = {
   loading: false,
   error: null,
@@ -60,7 +60,19 @@ export const fetchManagers = createAsyncThunk(
 const authSlice = createSlice({
   name: "auth",
   initialState: authInitialState,
-  reducers: {},
+  reducers: {
+    logout: (state) => {
+      // Clear Redux state
+      state.user = null;
+      state.token = null;
+      state.managers = [];
+      state.error = null;
+
+      // Clear localStorage
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+    }
+  },
   extraReducers: (builder) => {
     builder
 
@@ -110,4 +122,5 @@ const authSlice = createSlice({
   },
 });
 
+export const { logout } = authSlice.actions;
 export default authSlice.reducer;

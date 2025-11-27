@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Box,
   Card,
@@ -44,11 +44,16 @@ export default function SignInPage() {
     return Object.keys(e).length === 0;
   };
 
-  const handleSubmit = () => {
-    if (!validate()) return;
+  // const handleSubmit = () => {
+  //   if (!validate()) return;
 
+  //   dispatch(signinUser(values));
+  // };
+
+  const handleSubmit = useCallback(() => {
+    if (!validate()) return;
     dispatch(signinUser(values));
-  };
+  }, [validate, dispatch, values]);
 
   // Redirect after successful login
   useEffect(() => {

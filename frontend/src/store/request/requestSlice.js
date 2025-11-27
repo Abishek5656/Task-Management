@@ -82,7 +82,7 @@ const requestSlice = createSlice({
       })
       .addCase(fetchMyRequests.fulfilled, (state, action) => {
         state.loading = false;
-        state.list = action.payload;
+        state.list = action.payload.data;
       })
       .addCase(fetchMyRequests.rejected, (state, action) => {
         state.loading = false;

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPendingRequests } from "../../store/pending/pendingSlice";
-import  Button  from "../../components/ui/Button";
+import Button from "../../components/ui/Button";
 import { useNavigate } from "react-router-dom";
 
 export default function ManagerDashboard() {
@@ -14,8 +14,22 @@ export default function ManagerDashboard() {
     dispatch(fetchPendingRequests());
   }, [dispatch]);
 
+
+
+  const handleLogout = () => {
+
+    localStorage.removeItem("token")
+    localStorage.removeItem("user")
+    navigate("/singin")
+  }
+
   return (
     <div style={{ padding: 20 }}>
+
+
+      <button onClick={handleLogout}>
+        Logout
+      </button>
       <h2>Pending Approvals</h2>
 
       {loading && <p>Loading...</p>}

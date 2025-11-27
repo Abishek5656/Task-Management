@@ -10,3 +10,7 @@ export const signinApi = async (data) => {
   return axios.post(`${BASE_URL}/auth/login`, data);
 };
 
+
+export const managersApi  = async () => {
+  return axios.get(`${BASE_URL}/auth/manager`);
+}

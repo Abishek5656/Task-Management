@@ -1,6 +1,6 @@
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { signupApi, signinApi } from "../../api/authApi";
+import { signupApi, signinApi, managersApi } from "../../api/authApi";
 
 
 // 👉 Export initial state so you can import anywhere
@@ -9,6 +9,7 @@ export const authInitialState = {
   error: null,
   user: JSON.parse(localStorage.getItem("user")) || null,
   token: localStorage.getItem("token") || null,
+  managers: []
 };
 
 export const signupUser = createAsyncThunk(
@@ -41,6 +42,20 @@ export const signinUser = createAsyncThunk(
     }
   }
 );
+
+
+export const fetchManagers = createAsyncThunk(
+  "auth/fetchManagers",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await managersApi();
+      return res.data.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.error || "Failed to load managers");
+    }
+  }
+);
+
 
 const authSlice = createSlice({
   name: "auth",
@@ -76,7 +91,22 @@ const authSlice = createSlice({
       .addCase(signinUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+
+      // ---------- GET MANAGERS ----------
+      .addCase(fetchManagers.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchManagers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.managers = action.payload;   // stores manager list
+      })
+      .addCase(fetchManagers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
   },
 });
 
